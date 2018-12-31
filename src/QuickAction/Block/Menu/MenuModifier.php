@@ -12,6 +12,7 @@ use Concrete\Core\Block\Menu\Menu;
 class MenuModifier implements ModifierInterface
 {
     protected $block;
+    protected $bID;
 
     public function modifyMenu(ModifiableMenuInterface $menu)
     {
@@ -22,11 +23,9 @@ class MenuModifier implements ModifierInterface
         }
 
         $this->block = $block;
+        $this->bID = $block->getBlockID();
 
-        if ($menu->getPermissions()->canDeleteBlock()
-        ) {
-            $this->addItemTo($menu);
-        }
+        $this->addItemTo($menu);
     }
 
     /**
@@ -35,20 +34,62 @@ class MenuModifier implements ModifierInterface
     private function addItemTo($menu)
     {
         $app = Application::getFacadeApplication();
-        $menu->addItem(new DividerItem());
-        $menu->addItem(
-            new LinkItem(
-                'javascript:void(0)',
-                t('Quick Delete'),
-                [
-                    'data-menu-action' => 'quick_delete_block',
-                    'data-menu-href' => \URL::to('/ccm/system/dialogs/block/quickaction/delete'),
-                    'data-token' => $app->make('token')->generate('kalmoya/quickaction/delete'),
-                    'data-bID' => $this->block->getBlockID(),
-                    'data-cID' => $menu->getPage()->getCollectionID(),
-                    'data-arHandle' => $menu->getArea()->getAreaHandle(),
-                ]
-            )
-        );
+
+        $permissions = $menu->getPermissions();
+        if ($permissions->canDeleteBlock()) {
+            $menu->addItem(new DividerItem());
+            $menu->addItem(
+                new LinkItem(
+                    'javascript:void(0)',
+                    t('Quick Delete'),
+                    [
+                        'data-menu-action' => 'quick_delete_block',
+                        'data-menu-href' => \URL::to('/ccm/system/dialogs/block/quickaction/delete'),
+                        'data-token' => $app->make('token')->generate('kalmoya/quickaction/delete'),
+                        'data-bID' => $this->block->getBlockID(),
+                        'data-cID' => $menu->getPage()->getCollectionID(),
+                        'data-arHandle' => $menu->getArea()->getAreaHandle(),
+                    ]
+                )
+            );
+        }
+
+        $config = $app->make('config');
+
+        if ($permissions->canEditBlock()
+            && $this->block->isEditable()
+            && $config->get('concrete.design.enable_custom')
+        ) {
+            $menu->addItem(new DividerItem());
+            $menu->addItem(
+                new LinkItem(
+                    'javascript:void(0)',
+                    t('Save Design as Preset'),
+                    [
+                        'data-menu-action' => 'block_dialog',
+                        'data-menu-href' => \URL::to('/ccm/system/dialogs/block/quickaction/copystyleset'),
+                        'dialog-title' => t("Copy this block's custom design"),
+                        'dialog-width' => 600,
+                        'dialog-height' => 400,
+                    ]
+                )
+            );
+
+            if ($permissions->canEditBlockDesign()) {
+                $menu->addItem(
+                    new LinkItem(
+                        'javascript:void(0)',
+                        t('Apply Design Preset'),
+                        [
+                            'data-menu-action' => 'block_dialog',
+                            'data-menu-href' => \URL::to('/ccm/system/dialogs/block/quickaction/applystyleset'),
+                            'dialog-title' => t("Apply custom design preset"),
+                            'dialog-width' => 600,
+                            'dialog-height' => 400,
+                        ]
+                    )
+                );
+            }
+        }
     }
 }

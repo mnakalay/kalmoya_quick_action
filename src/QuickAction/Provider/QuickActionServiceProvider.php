@@ -44,7 +44,25 @@ class QuickActionServiceProvider
         /** @var RouterInterface $router */
         $router = $this->app->make(RouterInterface::class);
 
-        $router->register('/ccm/system/dialogs/block/quickaction/delete', '\Kalmoya\QuickAction\Controller\QuickAction::delete');
+        $router->registerMultiple(
+            [
+                '/ccm/system/dialogs/block/quickaction/delete' => [
+                    '\Kalmoya\QuickAction\Controller\QuickAction::delete',
+                ],
+                '/ccm/system/dialogs/block/quickaction/copystyleset' => [
+                    '\Kalmoya\QuickAction\Controller\Dialog\Block\CopyStyleSet::view',
+                ],
+                '/ccm/system/dialogs/block/quickaction/copystyleset/submit' => [
+                    '\Kalmoya\QuickAction\Controller\Dialog\Block\CopyStyleSet::submit',
+                ],
+                '/ccm/system/dialogs/block/quickaction/applystyleset' => [
+                    '\Kalmoya\QuickAction\Controller\Dialog\Block\ApplyStyleSet::view',
+                ],
+                '/ccm/system/dialogs/block/quickaction/applystyleset/submit' => [
+                    '\Kalmoya\QuickAction\Controller\Dialog\Block\ApplyStyleSet::submit',
+                ],
+            ]
+        );
     }
 
     public function registerAssets($pkg)
