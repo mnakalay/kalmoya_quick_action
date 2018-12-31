@@ -13,7 +13,7 @@ class Controller extends Package
 {
     protected $pkgHandle = 'kalmoya_quick_action';
     protected $appVersionRequired = '8.1.0';
-    protected $pkgVersion = '0.9';
+    protected $pkgVersion = '0.9.1';
     protected $pkgAutoloaderRegistries = [
         'src/QuickAction' => '\Kalmoya\QuickAction',
     ];
