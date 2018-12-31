@@ -21,12 +21,12 @@ class Controller extends Package
 
     public function getPackageDescription()
     {
-        return t("Delete blocks faster without confirmation %s Developed by Nour Akalay @ %sKALMOYA - bespoke Concrete5 development%s", '<br /><span style="font-size:11px;">', '<a target="_blank" href="https://kalmoya.com">', '</a></span>');
+        return t("A set of quick actions when working with blocks in edit mode %s Developed by Nour Akalay @ %sKALMOYA - bespoke Concrete5 development%s", '<br /><span style="font-size:11px;">', '<a target="_blank" href="https://kalmoya.com">', '</a></span>');
     }
 
     public function getPackageName()
     {
-        return t("Block Quick Delete");
+        return t("Block Quick Actions");
     }
 
     public function on_start()
