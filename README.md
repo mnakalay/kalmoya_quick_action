@@ -1,10 +1,11 @@
-# kalmoya Quick Action
-Delete blocks faster in Concrete5 v8 without confirmation.
+# kalmoya Quick Actions
 
-This package adds a "Quick Delete" item to blocks contextual menu in Concrete5 v8. It allows you to delete blocks faster by skipping the confirmation.
+This package adds a few things to the blocks' contextual edit menu
 
-**Be careful: once it's deleted, it's deleted!**
+- Delete blocks faster in Concrete5 v8 without confirmation (**Be careful: once it's deleted, it's deleted!**)
+- Create a preset from a block's custom design styles
+- Apply a saved preset to other blocks
 
-The package might be developed later on to add more shortcuts, hence the hesitation between Quick Action and Quick Delete for the name :)
+As I get (or am given) more ideas for shortcuts and helpers, they will be added to the package.
 
 Feel totally free to make suggestions for useful shortcuts.
