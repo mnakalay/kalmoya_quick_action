@@ -71,6 +71,7 @@ class ApplyStyleSet extends BackendInterfaceBlockController
             $block = $this->getBlockToEdit();
             $presetID = $this->getRequest()->get('presets');
             $oldIssID = $this->getRequest()->get('issID');
+
             $isError = true;
 
             if (!empty($presetID) && (int) $presetID == $presetID) {

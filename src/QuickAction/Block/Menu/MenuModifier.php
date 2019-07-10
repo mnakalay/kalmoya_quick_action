@@ -6,6 +6,7 @@ use Concrete\Core\Application\UserInterface\ContextMenu\Item\LinkItem;
 use Concrete\Core\Application\UserInterface\ContextMenu\Item\DividerItem;
 use Concrete\Core\Application\UserInterface\ContextMenu\ModifiableMenuInterface;
 use Concrete\Core\Application\UserInterface\ContextMenu\Modifier\ModifierInterface;
+use Concrete\Core\Url\Resolver\Manager\ResolverManagerInterface;
 use Concrete\Core\Support\Facade\Application;
 use Concrete\Core\Block\Menu\Menu;
 
@@ -35,7 +36,11 @@ class MenuModifier implements ModifierInterface
     {
         $app = Application::getFacadeApplication();
 
+        /** @var ResolverManagerInterface $resolver URL Resolver */
+        $resolver = $app->make(ResolverManagerInterface::class);
+
         $permissions = $menu->getPermissions();
+
         if ($permissions->canDeleteBlock()) {
             $menu->addItem(new DividerItem());
             $menu->addItem(
@@ -44,7 +49,7 @@ class MenuModifier implements ModifierInterface
                     t('Quick Delete'),
                     [
                         'data-menu-action' => 'quick_delete_block',
-                        'data-menu-href' => \URL::to('/ccm/system/dialogs/block/quickaction/delete'),
+                        'data-menu-href' => $resolver->resolve(['/ccm/system/dialogs/block/quickaction/delete']),
                         'data-token' => $app->make('token')->generate('kalmoya/quickaction/delete'),
                         'data-bID' => $this->block->getBlockID(),
                         'data-cID' => $menu->getPage()->getCollectionID(),
@@ -61,13 +66,14 @@ class MenuModifier implements ModifierInterface
             && $config->get('concrete.design.enable_custom')
         ) {
             $menu->addItem(new DividerItem());
+
             $menu->addItem(
                 new LinkItem(
                     'javascript:void(0)',
                     t('Save Design as Preset'),
                     [
                         'data-menu-action' => 'block_dialog',
-                        'data-menu-href' => \URL::to('/ccm/system/dialogs/block/quickaction/copystyleset'),
+                        'data-menu-href' => $resolver->resolve(['/ccm/system/dialogs/block/quickaction/copystyleset']),
                         'dialog-title' => t("Copy this block's custom design"),
                         'dialog-width' => 600,
                         'dialog-height' => 400,
@@ -82,7 +88,7 @@ class MenuModifier implements ModifierInterface
                         t('Apply Design Preset'),
                         [
                             'data-menu-action' => 'block_dialog',
-                            'data-menu-href' => \URL::to('/ccm/system/dialogs/block/quickaction/applystyleset'),
+                            'data-menu-href' => $resolver->resolve(['/ccm/system/dialogs/block/quickaction/applystyleset']),
                             'dialog-title' => t("Apply custom design preset"),
                             'dialog-width' => 600,
                             'dialog-height' => 400,
